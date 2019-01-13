@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: ui
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: LEGACYHTML5
+    cache: false
+    encoding: UTF-8
+server:
+  port: 8080
+  connection-timeout: 20000
+  tomcat:
+      max-connections: 1024

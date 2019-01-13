@@ -1,0 +1,50 @@
+<html>
+
+    <head>
+        <script src="webjars/jquery/3.3.1/dist/jquery.min.js"></script>
+
+        <script>
+            $(document).ajaxComplete(function (event,xhr,options) {
+
+
+                var token = xhr.getResponseHeader("access-token");
+
+                console.log("access-token= "+token);
+                if(token!=null && token != undefined && token !='undefined' && token !=''){
+                    localStorage.setItem("access-token",token);
+                }
+
+            });
+        </script>
+    </head>
+
+    <body>
+
+
+    </body>
+
+    <script>
+        var obj = new Object();
+        obj.name = "aaaa";
+        obj.password ="bbbb";
+
+        $.ajax({
+            cache: false,
+            async: false,
+            type: "POST",
+            url: 'http://127.0.0.1:8009/login/login',
+            ContentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(obj),
+            success: function(data){
+
+                alert(222)
+            },
+            error: function(){
+
+            }
+        });
+
+
+    </script>
+
+</html>

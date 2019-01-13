@@ -1,0 +1,46 @@
+#本文件中添加一些基本不变的属性
+eureka:
+    instance:
+        statusPageUrlPath: /info
+        healthCheckUrlPath: /health
+        # docker 部署开启
+        prefer-ip-address: true
+        ip-address: ${host_ip:localhost}
+
+    client:
+        registerWithEureka: true
+        fetchRegistry: true
+        serviceUrl:
+            defaultZone: http://${eureka_host:localhost}:${eureka_port:8761}/eureka/
+
+
+spring:
+    profiles:
+      active: dev
+    application:
+        name: gateway
+    cloud:
+        config:
+          discovery:
+            enabled: true
+            service-id: config-server
+          fail-fast: true
+          retry:
+            max-attempts: 6   # 配置重试次数，默认为6
+            max-interval: 2000  # 最大间隔时间，默认2000ms
+            initial-interval: 1000  # 初始重试间隔时间，默认1000ms
+            multiplier: 1.1   # 间隔乘数，默认1.1
+          username: user
+          password: neuabc
+        loadbalancer:
+          retry:
+            enabled: true
+
+
+server:
+    port: 8009 #启动端口
+
+
+management:
+  security:
+    enabled: false

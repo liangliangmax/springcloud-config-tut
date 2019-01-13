@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <script src="webjars/jquery/3.3.1/dist/jquery.min.js"></script>
+    </head>
+
+    <script>
+        $(document).ajaxSend(function (event,request,settings) {
+
+            var token = localStorage.getItem("access-token");
+
+            request.setRequestHeader("access-token",token);
+
+        });
+
+        $(document).ajaxComplete(function (event,xhr,options) {
+
+
+            var token = xhr.getResponseHeader("access-token");
+
+            console.log("access-token= "+token);
+            if(token!=null && token != undefined && token !='undefined' && token !=''){
+                localStorage.setItem("token",token);
+            }
+
+        });
+
+    </script>
+
+    <body>
+
+
+
+    </body>
+
+    <script>
+        var obj = new Object();
+
+        obj.name = "aaaa";
+        obj.password = "bbbb";
+
+        $.ajax({
+            cache: false,
+            async: false,
+            type: "post",
+            url: 'http://127.0.0.1:8009/data/consumer/testCros',
+            ContentType: 'application/json',
+            data: JSON.stringify(obj),
+            success: function(data){
+
+                alert(111)
+            },
+            error: function(){
+
+            }
+        });
+
+
+    </script>
+
+</html>

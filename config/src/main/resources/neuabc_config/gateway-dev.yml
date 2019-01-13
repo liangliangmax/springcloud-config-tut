@@ -1,0 +1,79 @@
+spring:
+    jackson:
+        date-format: yyyy-MM-dd HH:mm:ss
+        time-zone: GMT+8
+        default-property-inclusion: non_null
+    rabbitmq:
+        addresses: ${rabbitmq_host:172.16.62.128}:${rabbitmq_port:5672}
+        username: ${rabbitmq_username:root}
+        password: ${rabbitmq_password:root}
+        publisherconfirms: true
+        virtual-host: /
+        publisher-confirms: true
+        publisher-returns: true
+        template:
+              mandatory: true
+        listener:
+            concurrency: 5
+            max-concurrency: 100
+            acknowledge-mode: auto
+
+server:
+    connection-timeout: 20000
+    tomcat:
+        max-connections: 1024
+
+#由于feign内置了hystrix功能，所以这里加一个配置即可，不加这个的话hystrix不启用
+feign:
+  hystrix:
+    enabled: true
+
+#rpc调用controller的超时时间有好几个因素控制
+#首先分两大块，第一块是ribbon，第二块是hystrix，即发送请求的超时时间和熔断的超时时间
+#现在controller里面模拟一个5s的查询数据库，首先hystrix的timeout.enable要设置为false，如果是true，则设置的别的时间不生效
+#然后就是hystrix的timeoutInMilliseconds，ribbon的ConnectTimeout，ReadTimeout三个时间，以时间值最小的那个为准，别的设置时间再大也没有用
+#设置hystrix的超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE    #execution.isolation.strategy= THREAD|SEMAPHORE,两种线程隔离机制
+        timeout:
+          enabled: false
+      isolation:
+        thread:
+          timeoutInMilliseconds: 30000 #断路器的超时时间需要大于ribbon的超时时间，不然不会触发重试。
+
+#设置ribbon的超时时间
+#根据如下配置，当访问到故障请求的时候，它会再尝试访问一次当前实例（次数由MaxAutoRetries配置），
+#如果不行，就换一个实例进行访问，
+#如果还是不行，再换一次实例访问（更换次数由MaxAutoRetriesNextServer配置），如果依然不行，返回失败信息。
+ribbon:
+  ConnectTimeout: 30000   #请求连接的超时时间
+  ReadTimeout: 30000      #请求处理的超时时间
+  OkToRetryOnAllOperations: true    #对所有操作请求都进行重试
+  MaxAutoRetriesNextServer: 3       #切换实例的重试次数
+  MaxAutoRetries: 1       #对当前实例的重试次数
+  eager-load:
+    enabled: true
+  eureka:
+      enabled: true
+
+zuul:
+  addHostHeader: true  #将头信息 下发至下游服务
+  host:
+    maxTotalConnections: 2000
+    maxPerRouteConnections: 50
+    socket-timeout-millis: 7000
+    connect-timeout-millis: 7000
+
+  semaphore:
+    maxSemaphores: 5000
+
+  ignored-services: '*' #如果一个服务匹配到了要忽略的列表, 但是它也明确的配置在路由列表中, 将不会被忽略,
+  routes:
+    back:
+      path: /data/**
+      serviceId: consumer
+  sensitive-headers:    #将Cookie 信息下发至下游服务

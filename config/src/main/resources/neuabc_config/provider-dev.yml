@@ -1,0 +1,74 @@
+spring:
+    application:
+        name: provider
+    jackson:
+        date-format: yyyy-MM-dd HH:mm:ss
+        time-zone: GMT+8
+        default-property-inclusion: non_null
+    aop:
+        proxy-target-class: true
+
+    datasource:
+        name: neuabc_framework
+        url: jdbc:mysql://${mysql_host:172.16.62.192}:${mysql_port:3306}/${mysql_database:test2}?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&createDatabaseIfNotExist=true&useSSL=false
+        username: ${mysql_username:root}
+        password: ${mysql_password:root}
+        # 使用druid数据源
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        filters: stat
+        maxActive: 200
+        initialSize: 50
+        maxWait: 60000
+        minIdle: 10
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: true
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 50
+    redis:
+        database: 1
+        host: ${redis_host:172.16.62.192}
+        pool:
+            max-active: 20
+        password: ${redis_password:123456}
+        port: ${redis_port:6379}
+
+    rabbitmq:
+        addresses: ${rabbitmq_host:172.16.62.128}:${rabbitmq_port:5672}
+        username: ${rabbitmq_username:root}
+        password: ${rabbitmq_password:root}
+        publisherconfirms: true
+        virtual-host: /
+        publisher-confirms: true
+        publisher-returns: true
+        template:
+              mandatory: true
+        listener:
+            concurrency: 5
+            max-concurrency: 100
+            acknowledge-mode: auto
+
+server:
+    connection-timeout: 20000
+    tomcat:
+        max-connections: 1024
+
+mybatis:
+    xmlLocation: classpath*:mapper/**/*.xml
+
+# 测试数据库切换
+mysql:
+  test: aaaa
+
+# 测试redis切换
+redis:
+  mark: redis-aaaa
+
+# 测试配置整体注入
+config:
+  tomcat:
+    value: aaaa
