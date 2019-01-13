@@ -20,7 +20,7 @@ spring:
       config:
         server:
           native:
-            search-locations: classpath:/neuabc_config
+            search-locations: classpath:/neuabc_config/{profile}
           svn:
             uri: svn://172.16.62.192/neuabcconfig   # 用postman发post请求，输入http://localhost:8750/bus/refresh 即可刷新全部
             username: admin

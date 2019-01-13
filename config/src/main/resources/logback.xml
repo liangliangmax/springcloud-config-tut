@@ -12,7 +12,7 @@
     </appender>
 
 
-    <springProfile name="dev">
+    <springProfile name="native">
         <root level="INFO">
             <appender-ref ref="STDOUT" />
         </root>
