@@ -3,7 +3,7 @@
     <!-- 修改一下路径-->
     <!--生成在docker中的路径，docker启动需要映射-->
     <springProperty scope="context" name="appName" source="spring.application.name"/>
-    <property name="PATH" value="/usr/local/neuabc/log/${appName}"></property>
+    <property name="PATH" value="/Users/liang/Desktop/neuabc/log/${appName}"></property>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -18,7 +18,7 @@
         </root>
     </springProfile>
 
-    <springProfile name="prod">
+    <springProfile name="subversion">
 
         <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${PATH}/info.log</file>
@@ -83,7 +83,7 @@
             </filter>
         </appender>
 
-        <root level="DEBUG">
+        <root level="INFO">
             <appender-ref ref="STDOUT" />
             <appender-ref ref="INFO_FILE" />
             <appender-ref ref="DEBUG_FILE" />
