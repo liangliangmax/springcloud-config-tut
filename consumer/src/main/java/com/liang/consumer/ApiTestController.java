@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 @RestController
-@RequestMapping("/apiTestController")
+@RequestMapping("/apiTest")
 public class ApiTestController {
     @Autowired
     private ApiTestFeignClient apiTestFeignClient;
@@ -25,7 +25,7 @@ public class ApiTestController {
      * @param request
      * @return
      */
-    @PostMapping(value = "/test2Controller",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/test2",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String test2(@RequestBody User user,HttpServletRequest request){
 
         System.out.println(user.getName());
